@@ -1,5 +1,7 @@
 # PDF Generator
 
+[![CI](https://github.com/pavel-genai/pdf-generator/actions/workflows/ci.yml/badge.svg)](https://github.com/pavel-genai/pdf-generator/actions/workflows/ci.yml)
+
 A Kotlin library for generating PDF 1.4 documents with a clean DSL.
 
 ## Features

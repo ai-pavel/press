@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.22"
+    jacoco
     application
 }
 
@@ -17,6 +18,13 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+    }
 }
 
 kotlin {

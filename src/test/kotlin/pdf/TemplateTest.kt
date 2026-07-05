@@ -87,4 +87,140 @@ class TemplateTest {
         assertEquals("Widget", table.rows[0][0].text)
         assertEquals("$10", table.rows[0][1].text)
     }
+
+    @Test
+    fun `renderDocument preserves Image elements`() {
+        val imgData = byteArrayOf(1, 2, 3)
+        val doc = document {
+            page {
+                element(Image.fromBytes(imgData, ImageFormat.PNG, 100f, 80f))
+            }
+        }
+        val rendered = Template.renderDocument(doc, mapOf("x" to "y"))
+        val img = rendered.pages[0].elements[0] as Image
+        assertTrue(imgData.contentEquals(img.data))
+    }
+
+    @Test
+    fun `renderDocument preserves HorizontalRule elements`() {
+        val doc = document {
+            page { horizontalRule(2f, Color.RED) }
+        }
+        val rendered = Template.renderDocument(doc, emptyMap())
+        val hr = rendered.pages[0].elements[0] as HorizontalRule
+        assertEquals(2f, hr.thickness)
+        assertEquals(Color.RED, hr.color)
+    }
+
+    @Test
+    fun `renderDocument preserves Spacer elements`() {
+        val doc = document {
+            page { spacer(25f) }
+        }
+        val rendered = Template.renderDocument(doc, emptyMap())
+        val spacer = rendered.pages[0].elements[0] as Spacer
+        assertEquals(25f, spacer.height)
+    }
+
+    @Test
+    fun `renderDocument replaces metadata author and subject`() {
+        val doc = document {
+            title = "{{title}}"
+            author = "{{author}}"
+            subject = "{{subject}}"
+            page { paragraph("content") }
+        }
+        val data = mapOf("title" to "T", "author" to "A", "subject" to "S")
+        val rendered = Template.renderDocument(doc, data)
+        assertEquals("T", rendered.metadata.title)
+        assertEquals("A", rendered.metadata.author)
+        assertEquals("S", rendered.metadata.subject)
+    }
+
+    @Test
+    fun `renderDocument preserves creator`() {
+        val doc = document {
+            creator = "My Creator"
+            page { paragraph("test") }
+        }
+        val rendered = Template.renderDocument(doc, emptyMap())
+        assertEquals("My Creator", rendered.metadata.creator)
+    }
+
+    @Test
+    fun `template with no placeholders`() {
+        val result = Template.render("Hello World", emptyMap())
+        assertEquals("Hello World", result)
+    }
+
+    @Test
+    fun `template empty string`() {
+        val result = Template.render("", emptyMap())
+        assertEquals("", result)
+    }
+
+    @Test
+    fun `nested key with three levels`() {
+        val data = mapOf(
+            "a" to mapOf(
+                "b" to mapOf(
+                    "c" to "deep_value"
+                )
+            )
+        )
+        val result = Template.render("{{a.b.c}}", data)
+        assertEquals("deep_value", result)
+    }
+
+    @Test
+    fun `nested key with missing intermediate`() {
+        val data = mapOf("a" to mapOf("b" to "value"))
+        val result = Template.render("{{a.c.d}}", data)
+        assertEquals("{{a.c.d}}", result)
+    }
+
+    @Test
+    fun `nested key with non-map intermediate`() {
+        val data = mapOf("a" to "string_value")
+        val result = Template.render("{{a.b}}", data)
+        assertEquals("{{a.b}}", result)
+    }
+
+    @Test
+    fun `template instance render method`() {
+        val template = Template("Hello, {{name}}!")
+        val result = template.render(mapOf("name" to "World"))
+        assertEquals("Hello, World!", result)
+    }
+
+    @Test
+    fun `placeholders returns empty set for no placeholders`() {
+        val template = Template("No placeholders here")
+        assertEquals(emptySet(), template.placeholders())
+    }
+
+    @Test
+    fun `placeholders with underscore in key`() {
+        val template = Template("{{first_name}} {{last_name}}")
+        assertEquals(setOf("first_name", "last_name"), template.placeholders())
+    }
+
+    @Test
+    fun `renderDocument with multiple pages`() {
+        val doc = document {
+            page { paragraph("Page1 {{x}}") }
+            page { paragraph("Page2 {{x}}") }
+        }
+        val rendered = Template.renderDocument(doc, mapOf("x" to "VAL"))
+        val p1 = rendered.pages[0].elements[0] as Paragraph
+        val p2 = rendered.pages[1].elements[0] as Paragraph
+        assertEquals("Page1 VAL", p1.text)
+        assertEquals("Page2 VAL", p2.text)
+    }
+
+    @Test
+    fun `template with numeric value`() {
+        val result = Template.render("Count: {{count}}", mapOf("count" to 42))
+        assertEquals("Count: 42", result)
+    }
 }

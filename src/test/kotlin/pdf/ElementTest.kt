@@ -54,4 +54,62 @@ class ElementTest {
     fun `Spacer default height`() {
         assertEquals(12f, Spacer().height)
     }
+
+    @Test
+    fun `Spacer custom height`() {
+        val spacer = Spacer(50f)
+        assertEquals(50f, spacer.height)
+    }
+
+    @Test
+    fun `Heading effective style preserves custom color`() {
+        val heading = Heading("Title", level = 1, style = TextStyle(color = Color.RED))
+        val effective = heading.effectiveStyle()
+        assertEquals(Color.RED, effective.color)
+        assertTrue(effective.bold)
+        assertEquals(24f, effective.fontSize)
+    }
+
+    @Test
+    fun `Heading effective style for level 5+ defaults to 14f`() {
+        val heading = Heading("Deep", level = 10)
+        assertEquals(14f, heading.effectiveStyle().fontSize)
+    }
+
+    @Test
+    fun `Heading default values`() {
+        val heading = Heading("Test")
+        assertEquals("Test", heading.text)
+        assertEquals(1, heading.level)
+        assertEquals(TextStyle(), heading.style)
+    }
+
+    @Test
+    fun `Paragraph default style`() {
+        val p = Paragraph("text")
+        assertEquals(TextStyle(), p.style)
+    }
+
+    @Test
+    fun `HorizontalRule custom values`() {
+        val hr = HorizontalRule(3f, Color.BLUE)
+        assertEquals(3f, hr.thickness)
+        assertEquals(Color.BLUE, hr.color)
+    }
+
+    @Test
+    fun `Heading effective style preserves fontFamily`() {
+        val heading = Heading("Title", level = 2, style = TextStyle(fontFamily = FontFamily.COURIER))
+        val effective = heading.effectiveStyle()
+        assertEquals(FontFamily.COURIER, effective.fontFamily)
+        assertEquals(20f, effective.fontSize)
+        assertTrue(effective.bold)
+    }
+
+    @Test
+    fun `Heading effective style preserves lineSpacing`() {
+        val heading = Heading("Title", level = 3, style = TextStyle(lineSpacing = 2.0f))
+        val effective = heading.effectiveStyle()
+        assertEquals(2.0f, effective.lineSpacing)
+    }
 }

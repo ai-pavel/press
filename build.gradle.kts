@@ -32,7 +32,9 @@ kotlin {
 }
 
 application {
-    mainClass.set("pdf.CliKt")
+    // The distribution runs the HTTP server; the CLI remains available
+    // via the fat jar (Main-Class: pdf.CliKt).
+    mainClass.set("pdf.ServerMainKt")
 }
 
 tasks.jar {

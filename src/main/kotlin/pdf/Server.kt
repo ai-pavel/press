@@ -36,7 +36,7 @@ class PdfServer(port: Int = DEFAULT_PORT) {
         const val DEFAULT_PORT = 8080
     }
 
-    private val healthBody = """{"status":"ok","service":"pdf-generator"}""".toByteArray(Charsets.UTF_8)
+    private val healthBody = """{"status":"ok","service":"press"}""".toByteArray(Charsets.UTF_8)
 
     private val server: HttpServer = HttpServer.create(InetSocketAddress(port), 0).apply {
         createContext("/health") { exchange ->

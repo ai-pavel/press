@@ -35,7 +35,7 @@ class ServerTest {
 
         assertEquals(200, response.statusCode())
         assertEquals("application/json", response.headers().firstValue("Content-Type").orElse(""))
-        assertEquals("""{"status":"ok","service":"pdf-generator"}""", response.body())
+        assertEquals("""{"status":"ok","service":"press"}""", response.body())
     }
 
     @Test

@@ -1,7 +1,7 @@
 # PDF Generator
 
-[![CI](https://github.com/ai-pavel/pdf-generator/actions/workflows/ci.yml/badge.svg)](https://github.com/ai-pavel/pdf-generator/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/ai-pavel/pdf-generator/branch/main/graph/badge.svg)](https://codecov.io/gh/ai-pavel/pdf-generator)
+[![CI](https://github.com/ai-pavel/press/actions/workflows/ci.yml/badge.svg)](https://github.com/ai-pavel/press/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/ai-pavel/press/branch/main/graph/badge.svg)](https://codecov.io/gh/ai-pavel/press)
 
 A Kotlin library for generating PDF 1.4 documents with a clean DSL.
 

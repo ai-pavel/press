@@ -1,0 +1,27 @@
+# Gradle
+.gradle/
+build/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kotlin
+*.class
+*.jar
+*.war
+*.ear
+
+# But keep gradle wrapper jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Test output
+*.pdf
+!src/test/resources/*.pdf
